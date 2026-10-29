@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>五子棋 · 双人对弈</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<meta name="color-scheme" content="light" />
+<meta name="theme-color" content="#F3EBDF" />
+<meta name="description" content="无禁手五子棋，两台手机扫码即玩，支持流量联机。" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="五子棋" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="icons/icon-180.png" />
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<main id="app">
+
+  <!-- ───────────── 首页 ───────────── -->
+  <section id="screen-home" class="screen">
+    <header class="brand">
+      <div class="seal">五</div>
+      <h1>五子棋</h1>
+      <p class="tagline">无禁手 · 双人联机</p>
+    </header>
+
+    <div class="card">
+      <div class="field">
+        <div class="field-head">
+          <label>每步限时</label>
+          <span class="field-note">超出后按下方设置处理</span>
+        </div>
+        <div class="segmented" id="time-options">
+          <button type="button" data-time="10">10 秒</button>
+          <button type="button" data-time="30" class="on">30 秒</button>
+          <button type="button" data-time="60">60 秒</button>
+          <button type="button" data-time="0">不限</button>
+        </div>
+      </div>
+
+      <div class="field inline">
+        <div>
+          <label for="timeout-lose">超时判负</label>
+          <span class="field-note">关闭后只是时间到，不判输赢</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="timeout-lose" checked />
+          <span class="track"><span class="thumb"></span></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="actions-col">
+      <button type="button" id="btn-create" class="btn primary">创建房间</button>
+      <button type="button" id="btn-resume" class="btn ghost hidden">回到上次的房间</button>
+    </div>
+
+    <p class="footnote">
+      你和朋友各自打开链接就能下，一个用 WiFi、一个用流量也没问题。
+    </p>
+  </section>
+
+  <!-- ───────────── 等待对手 ───────────── -->
+  <section id="screen-lobby" class="screen hidden">
+    <header class="lobby-head">
+      <h2>等待对手</h2>
+      <p class="tagline">把链接发给朋友，对方点开就能进</p>
+    </header>
+
+    <div class="linkbox">
+      <input id="share-link" type="text" readonly spellcheck="false" />
+      <button type="button" id="btn-copy" class="btn small">复制</button>
+    </div>
+
+    <div class="lobby-state">
+      <div class="pulse"><i></i><i></i><i></i></div>
+      <p id="lobby-status">正在连接…</p>
+    </div>
+
+    <div class="room-meta">
+      <span class="chip" id="room-chip">房间 —</span>
+      <span class="chip" id="rule-chip">30 秒 / 步</span>
+    </div>
+
+    <button type="button" id="btn-leave-lobby" class="btn ghost">离开房间</button>
+  </section>
+
+  <!-- ───────────── 对局 ───────────── -->
+  <section id="screen-game" class="screen hidden">
+    <div class="hud">
+      <div class="player-card" id="card-top">
+        <span class="stone-icon" data-color="white"></span>
+        <div class="player-meta">
+          <span class="player-name">对手</span>
+          <span class="player-tag" data-tag></span>
+        </div>
+        <span class="clock" data-clock>—</span>
+      </div>
+      <div class="player-card" id="card-bottom">
+        <span class="stone-icon" data-color="black"></span>
+        <div class="player-meta">
+          <span class="player-name">你</span>
+          <span class="player-tag" data-tag></span>
+        </div>
+        <span class="clock" data-clock>—</span>
+      </div>
+    </div>
+
+    <div class="board-wrap">
+      <div class="board-stack">
+        <div class="board-frame">
+          <canvas id="board" aria-label="棋盘"></canvas>
+          <div class="turn-banner" id="turn-banner"></div>
+        </div>
+        <div class="board-caption" id="board-caption"></div>
+      </div>
+    </div>
+
+    <div class="quick-chat hidden" id="quick-chat">
+      <div class="quick-row" id="quick-row"></div>
+    </div>
+
+    <nav class="actions">
+      <button type="button" id="btn-undo"><span>悔棋</span></button>
+      <button type="button" id="btn-draw"><span>和棋</span></button>
+      <button type="button" id="btn-resign"><span>认输</span></button>
+      <button type="button" id="btn-chat"><span>聊天</span></button>
+    </nav>
+  </section>
+
+  <!-- ───────────── 弹层 ───────────── -->
+  <div class="overlay hidden" id="overlay">
+    <div class="dialog" role="dialog" aria-modal="true">
+      <h3 id="dialog-title"></h3>
+      <p id="dialog-text"></p>
+      <div class="dialog-actions" id="dialog-actions"></div>
+    </div>
+  </div>
+
+  <div class="toast-wrap" id="toast-wrap"></div>
+  <div class="bubbles" id="bubbles"></div>
+</main>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
